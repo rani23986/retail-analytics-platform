@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+# Streamlit secrets (never commit)
+.streamlit/secrets.toml
+
+# Virtual environments
+.venv/
+venv/
+
+# VS Code
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Datasets (too large for git)
+data/raw/
+data/cleaned/
+
+# Reports
+reports/
