@@ -1,46 +1,44 @@
 import pandas as pd
 import streamlit as st
-
 from src.database.db_connection import engine
 
+@st.cache_data
+def get_total_customers():
+    query = "SELECT COUNT(DISTINCT customer_unique_id) AS Total_Customers FROM customers;"
+    return pd.read_sql(query, engine)
 
-@st.cache_data(ttl=600)
+@st.cache_data
 def get_repeat_customers():
-
     query = """
-    SELECT
-        c.customer_unique_id,
-        COUNT(o.order_id) AS total_orders
-    FROM customers c
-    JOIN orders o
-        ON c.customer_id = o.customer_id
-    GROUP BY c.customer_unique_id
-    HAVING COUNT(o.order_id) > 1
-    ORDER BY total_orders DESC;
+    SELECT COUNT(*) AS Repeat_Customers
+    FROM (
+        SELECT c.customer_unique_id
+        FROM orders o
+        JOIN customers c ON o.customer_id = c.customer_id
+        GROUP BY c.customer_unique_id
+        HAVING COUNT(o.order_id) > 1
+    ) AS repeat_table;
     """
-
     return pd.read_sql(query, engine)
 
-
-@st.cache_data(ttl=600)
-def get_unique_customers():
-
+@st.cache_data
+def get_top_customer_states():
     query = """
-    SELECT
-        COUNT(DISTINCT customer_unique_id) AS unique_customers
-    FROM customers;
+    SELECT customer_state, COUNT(DISTINCT customer_unique_id) AS Total_Customers
+    FROM customers
+    GROUP BY customer_state
+    ORDER BY Total_Customers DESC
+    LIMIT 10;
     """
-
     return pd.read_sql(query, engine)
 
-
-@st.cache_data(ttl=600)
-def get_average_rating():
-
+@st.cache_data
+def get_top_customer_cities():
     query = """
-    SELECT
-        ROUND(AVG(review_score),2) AS avg_rating
-    FROM order_reviews;
+    SELECT customer_city, COUNT(DISTINCT customer_unique_id) AS Total_Customers
+    FROM customers
+    GROUP BY customer_city
+    ORDER BY Total_Customers DESC
+    LIMIT 10;
     """
-
     return pd.read_sql(query, engine)
