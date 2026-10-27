@@ -42,3 +42,8 @@ def get_top_customer_cities():
     LIMIT 10;
     """
     return pd.read_sql(query, engine)
+
+get_customer_states = get_top_customer_states
+get_top_states = get_top_customer_states
+get_customer_cities = get_top_customer_cities
+get_top_cities = get_top_customer_cities

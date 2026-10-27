@@ -32,3 +32,7 @@ def get_late_deliveries():
     WHERE order_delivered_customer_date > order_estimated_delivery_date;
     """
     return pd.read_sql(query, engine)
+
+get_order_status_distribution = get_Order_status_distribution
+get_order_status = get_Order_status_distribution
+get_avg_delivery_time = get_average_delivery_time
